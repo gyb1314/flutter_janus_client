@@ -92,8 +92,8 @@ class _MyAppState extends State<MyApp> {
             username: "onemandev",
             credential: "SecureIt")
       ], server: [
-        'wss://janus.onemandev.tech/websocket',
-        'http://104.45.152.100:55493/janus'
+        // 'wss://janus.onemandev.tech/websocket',
+        'ws://stream.slaman.cn:8188'
       ], withCredentials: true, apiSecret: "SecureIt");
       j.connect(onSuccess: () async {
         debugPrint('voilla! connection established');
