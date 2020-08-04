@@ -84,13 +84,13 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       j = JanusClient(iceServers: [
         RTCIceServer(
-            url: "stun:40.85.216.95:3478",
-            username: "onemandev",
-            credential: "SecureIt"),
+            url: "stun:139.9.39.212:3478",
+            username: "gyb1",
+            credential: "abc123456"),
         RTCIceServer(
-            url: "turn:40.85.216.95:3478",
-            username: "onemandev",
-            credential: "SecureIt")
+            url: "turn:139.9.39.212:3478",
+            username: "gyb1",
+            credential: "abc123456")
       ], server: [
         // 'wss://janus.onemandev.tech/websocket',
         'ws://stream.slaman.cn:8188'
@@ -139,8 +139,8 @@ class _MyAppState extends State<MyApp> {
                   onSuccess: () async {
                     var publish = {
                       "request": "configure",
-                      "audio": true,
-                      "video": true,
+                      "audio": false,
+                      "video": false,
                       "bitrate": 2000000
                     };
                     RTCSessionDescription offer = await plugin.createOffer();
