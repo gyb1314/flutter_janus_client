@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   characters: ^1.0.0
+#  wakelock: ^0.1.4+2
 
 
   janus_client:

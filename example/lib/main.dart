@@ -2,13 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:janus_client/Plugin.dart';
 import 'package:janus_client/janus_client.dart';
 import 'package:janus_client/utils.dart';
+//import 'package:wakelock/wakelock.dart';
 
 void main() {
-  runApp(MyApp());
+  // 强制横屏
+  WidgetsFlutterBinding.ensureInitialized();
+  // 强制不息屏
+//  Wakelock.enable();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]).then((onVal) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -40,6 +48,7 @@ class _MyAppState extends State<MyApp> {
   initRenderers() async {
     await _localRenderer.initialize();
     await _remoteRenderer.initialize();
+    await this.initPlatformState();
   }
 
   _newRemoteFeed(JanusClient j, feed) async {
@@ -78,6 +87,30 @@ class _MyAppState extends State<MyApp> {
             _remoteRenderer.mirror = true;
           });
         }));
+  }
+
+  Future<void> pushLocalStream() async{
+    setState(() {
+      var register = {
+        "request": "join",
+        "room": 1234,
+        "ptype": "publisher",
+        "display": 'shivansh'
+      };
+      pluginHandle.send(
+          message: register,
+          onSuccess: () async {
+            var publish = {
+              "request": "configure",
+              "audio": false,
+              "video": false,
+              "bitrate": 2000000
+            };
+            RTCSessionDescription offer = await pluginHandle.createOffer();
+            pluginHandle.send(
+                message: publish, jsep: offer, onSuccess: () {});
+          });
+    });
   }
 
   Future<void> initPlatformState() async {
@@ -128,25 +161,6 @@ class _MyAppState extends State<MyApp> {
                 _localRenderer.srcObject = myStream;
                 _localRenderer.mirror = true;
               });
-              var register = {
-                "request": "join",
-                "room": 1234,
-                "ptype": "publisher",
-                "display": 'shivansh'
-              };
-              plugin.send(
-                  message: register,
-                  onSuccess: () async {
-                    var publish = {
-                      "request": "configure",
-                      "audio": false,
-                      "video": false,
-                      "bitrate": 2000000
-                    };
-                    RTCSessionDescription offer = await plugin.createOffer();
-                    plugin.send(
-                        message: publish, jsep: offer, onSuccess: () {});
-                  });
             }));
       }, onError: (e) {
         debugPrint('some error occured');
@@ -166,8 +180,7 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.greenAccent,
                 ),
                 onPressed: () async {
-                  await this.initRenderers();
-                  await this.initPlatformState();
+                  await this.pushLocalStream();
 //                  -_localRenderer.
                 }),
             IconButton(
