@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
             await subscriberPc.setRemoteDescription(
                 RTCSessionDescription(jsep["sdp"], jsep["type"]));
             RTCSessionDescription offer = await subscriberPc.createAnswer(
-                {"offerToReceiveAudio": false, "offerToReceiveVideo": false});
+                {"offerToReceiveAudio": true, "offerToReceiveVideo": true});
             await subscriberPc.setLocalDescription(offer);
             var body = {"request": "start", "room": 1234};
             subscriberHandle.send(

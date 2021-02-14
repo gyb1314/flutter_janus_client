@@ -95,15 +95,15 @@ class _MyAppState extends State<MyApp> {
         "request": "join",
         "room": 1234,
         "ptype": "publisher",
-        "display": 'shivansh'
+        "display": 'gyb-Android'
       };
       pluginHandle.send(
           message: register,
           onSuccess: () async {
             var publish = {
               "request": "configure",
-              "audio": false,
-              "video": false,
+              "audio": true,
+              "video": true,
               "bitrate": 2000000
             };
             RTCSessionDescription offer = await pluginHandle.createOffer();
@@ -125,9 +125,10 @@ class _MyAppState extends State<MyApp> {
             username: "gyb1",
             credential: "abc123456")
       ], server: [
+        // 'wss://123.207.136.134:9010/ajaxchattest',
         // 'wss://janus.onemandev.tech/websocket',
-        'ws://stream.slaman.cn:8188'
-      ], withCredentials: true, apiSecret: "SecureIt");
+        'wss://stream.slaman.cn:8989',
+      ], withCredentials: true, apiSecret: "huaguowuhengyb");
       j.connect(onSuccess: () async {
         debugPrint('voilla! connection established');
         Map<String, dynamic> configuration = {
